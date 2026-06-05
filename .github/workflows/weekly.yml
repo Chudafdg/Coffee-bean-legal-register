@@ -46,6 +46,7 @@ jobs:
           password: ${{ secrets.GMAIL_APP_PASSWORD }}
           subject: "[กาแฟโรบัสต้า] ผลตรวจสอบกฎหมาย"
           to: ${{ secrets.NOTIFY_EMAIL }}
+          cc: ${{ secrets.CC_EMAIL }}
           from: Regulation Bot <${{ secrets.GMAIL_USER }}>
           body: |
             ระบบตรวจสอบกฎหมายเมล็ดกาแฟโรบัสต้า
