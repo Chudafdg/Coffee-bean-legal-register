@@ -20,12 +20,12 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: ติดตั้งเครื่องมือ Anthropic
-        run: pip install anthropic
+      - name: ติดตั้งเครื่องมือ Google AI
+        run: pip install google-generativeai requests
 
       - name: เริ่มตรวจสอบกฎหมาย
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GOOGLE_AI_KEY: ${{ secrets.GOOGLE_AI_KEY }}
         run: python scripts/check_updates.py
 
       - name: บันทึกผลการอัปเดตลงระบบ
@@ -44,17 +44,13 @@ jobs:
           server_port: 587
           username: ${{ secrets.GMAIL_USER }}
           password: ${{ secrets.GMAIL_APP_PASSWORD }}
-          subject: "[กาแฟโรบัสต้า] ผลตรวจสอบกฎหมาย $(date +%Y-%m-%d)"
+          subject: "[กาแฟโรบัสต้า] ผลตรวจสอบกฎหมาย"
           to: ${{ secrets.NOTIFY_EMAIL }}
           from: Regulation Bot <${{ secrets.GMAIL_USER }}>
           body: |
             ระบบตรวจสอบกฎหมายเมล็ดกาแฟโรบัสต้า
             =======================================
-            วันที่ตรวจสอบ: $(date +%Y-%m-%d)
             สถานะ: ${{ job.status }}
 
-            ดูรายละเอียดได้ที่:
-            https://${{ github.repository_owner }}.github.io/Coffee-bean-legal-register
-
-            ดู log การทำงาน:
-            https://github.com/${{ github.repository }}/actions
+            ดูรายละเอียด: https://${{ github.repository_owner }}.github.io/Coffee-bean-legal-register
+            ดู log: https://github.com/${{ github.repository }}/actions
