@@ -21,7 +21,7 @@ jobs:
           python-version: '3.11'
 
       - name: ติดตั้งเครื่องมือ Gemini AI
-        run: pip install google-generativeai
+        run: pip install google-genai
 
       - name: เริ่มตรวจสอบกฎหมาย
         env:
