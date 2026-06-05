@@ -21,7 +21,7 @@ jobs:
           python-version: '3.11'
 
       - name: ติดตั้งเครื่องมือ Google AI
-        run: pip install google-generativeai requests
+        run: pip install requests
 
       - name: เริ่มตรวจสอบกฎหมาย
         env:
@@ -38,7 +38,7 @@ jobs:
 
       - name: ส่งอีเมลแจ้งเตือน
         if: always()
-        uses: dawidd6/action-send-mail@v3
+        uses: dawidd6/action-send-mail@v4
         with:
           server_address: smtp.gmail.com
           server_port: 587
