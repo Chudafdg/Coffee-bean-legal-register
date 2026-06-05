@@ -1,9 +1,10 @@
 import os
 import json
+import time
 from datetime import date
 from google import genai
 
-# นำกุญแจ API มาใช้งานด้วยไลบรารีเวอร์ชันใหม่
+# นำกุญแจ API มาใช้งาน
 client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
 # ตั้งค่าคีย์เวิร์ดดักจับในราชกิจจานุเบกษา และ Codex
@@ -35,9 +36,9 @@ def check_regulations():
     for source in SOURCES:
         print(f"กำลังตรวจสอบ: {source['name']}")
         try:
-            # สั่ง Gemini ให้ประเมินข้อมูลด้วยคำสั่งเวอร์ชันใหม่
+            # กลับมาใช้ gemini-1.5-flash ที่เป็นตัวฟรีมาตรฐาน
             response = client.models.generate_content(
-                model='gemini-2.0-flash', 
+                model='gemini-1.5-flash', 
                 contents=f"คุณคือผู้เชี่ยวชาญด้านกฎหมายอาหาร หน้าที่ของคุณคือ: {source['prompt']} \nตอบเฉพาะรูปแบบ JSON เท่านั้น ดังนี้: {{\"updated\": true/false, \"detail\": \"รายละเอียดที่พบ\"}}"
             )
             
@@ -60,7 +61,6 @@ def check_regulations():
                 update_summary.append(source["name"])
                 
         except Exception as e:
-            # ดักจับกรณีเว็บล่ม หรือ AI ประมวลผลพลาด
             print(f"พบข้อผิดพลาดกับ {source['name']}: {e}")
             error_summary.append(source["name"])
             
@@ -69,12 +69,15 @@ def check_regulations():
                 "name": source["name"],
                 "status": "failed",
                 "updated": False,
-                "detail": f"การตรวจสอบล้มเหลว: จำเป็นต้องตรวจสอบด้วยมนุษย์",
+                "detail": f"การตรวจสอบล้มเหลว: {e}",
                 "checked_at": str(date.today())
             }
             results.append(result_entry)
 
-    # สร้างข้อความสรุปการอัปเดตและข้อผิดพลาด
+        # หน่วงเวลา 5 วินาที เพื่อไม่ให้ API ทำงานหนักเกินไปจนโดนบล็อก
+        print("พัก 5 วินาทีเพื่อป้องกัน Rate Limit...")
+        time.sleep(5)
+
     final_summary = ""
     if has_updates:
         final_summary += "มีการอัปเดต: " + ", ".join(update_summary) + " | "
@@ -83,7 +86,6 @@ def check_regulations():
     if not has_updates and not error_summary:
         final_summary = "ไม่พบการเปลี่ยนแปลง (ระบบทำงานปกติ)"
 
-    # บันทึกลงไฟล์
     output = {
         "last_checked": str(date.today()),
         "has_updates": has_updates,
