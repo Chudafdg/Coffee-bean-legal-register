@@ -18,8 +18,8 @@ SOURCES = [
         "check_prompt": "ค้นหาข้อมูลจาก ratchakitcha.soc.go.th และ acfs.go.th ว่ามีประกาศกระทรวงเกษตรและสหกรณ์ เรื่อง กำหนดมาตรฐานสินค้าเกษตร มกษ. 5700 กาแฟโรบัสตา ฉบับใหม่หรือแก้ไขหลังจากปี 2561 หรือไม่"
     },
     {
-        "id": "สธ_สารพิษ_460",
-        "name": "ประกาศ สธ. ฉ.460 สารพิษตกค้าง",
+        "id": "สธ_สารพิษ",
+        "name": "ประกาศ สธ. สารพิษตกค้าง",
         "check_prompt": "ค้นหาจาก food.fda.moph.go.th ว่ามีประกาศกระทรวงสาธารณสุข เรื่อง อาหารที่มีสารพิษตกค้าง ฉบับใหม่หลังจากฉบับที่ 460 พ.ศ. 2568 ที่เกี่ยวข้องกับกาแฟหรือไม่"
     },
     {
@@ -200,6 +200,9 @@ def check_regulations():
     print(f"เสร็จสิ้น | มีการอัปเดต: {has_updates} | Error: {len(error_names)}/{len(SOURCES)}")
     print(f"สรุป: {summary}")
 
+
+if error_summary:
+        raise RuntimeError(f"แจ้งเตือน: พบข้อผิดพลาดในการตรวจสอบ {len(error_summary)} รายการ")
 
 if __name__ == "__main__":
     check_regulations()
