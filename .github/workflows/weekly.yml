@@ -1,9 +1,9 @@
-name: Weekly Legal Register Check
+name: Weekly Regulation Check
 
 on:
   schedule:
-    - cron: '0 1 * * 1'  # ทำงานทุกวันจันทร์ 08:00 น. เวลาไทย
-  workflow_dispatch:     # ปุ่มให้เรากดรันเองได้ตลอดเวลา
+    - cron: '0 1 * * 1'   # ทุกวันจันทร์ 08:00 น. ไทย (UTC+7)
+  workflow_dispatch:        # รันมือได้ทันที
 
 jobs:
   check-regulations:
@@ -20,18 +20,41 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: ติดตั้งเครื่องมือ Gemini AI
+      - name: ติดตั้งเครื่องมือ Anthropic
         run: pip install anthropic
 
       - name: เริ่มตรวจสอบกฎหมาย
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python scripts/check_updates.py
 
       - name: บันทึกผลการอัปเดตลงระบบ
         run: |
-          git config user.email "qa-bot@github.com"
-          git config user.name "QA Regulation Bot"
+          git config user.email "bot@github.com"
+          git config user.name "Regulation Bot"
           git add data/regulations.json
-          git diff --staged --quiet || git commit -m "อัปเดตสถานะกฎหมายประจำสัปดาห์ $(date +%Y-%m-%d)"
+          git diff --staged --quiet || git commit -m "update: weekly check $(date +%Y-%m-%d)"
           git push
+
+      - name: ส่งอีเมลแจ้งเตือน
+        if: always()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.GMAIL_USER }}
+          password: ${{ secrets.GMAIL_APP_PASSWORD }}
+          subject: "[กาแฟโรบัสต้า] ผลตรวจสอบกฎหมาย $(date +%Y-%m-%d)"
+          to: ${{ secrets.NOTIFY_EMAIL }}
+          from: Regulation Bot <${{ secrets.GMAIL_USER }}>
+          body: |
+            ระบบตรวจสอบกฎหมายเมล็ดกาแฟโรบัสต้า
+            =======================================
+            วันที่ตรวจสอบ: $(date +%Y-%m-%d)
+            สถานะ: ${{ job.status }}
+
+            ดูรายละเอียดได้ที่:
+            https://${{ github.repository_owner }}.github.io/Coffee-bean-legal-register
+
+            ดู log การทำงาน:
+            https://github.com/${{ github.repository }}/actions
