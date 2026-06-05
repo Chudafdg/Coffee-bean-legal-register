@@ -36,13 +36,12 @@ def check_regulations():
     for source in SOURCES:
         print(f"กำลังตรวจสอบ: {source['name']}")
         try:
-            # กลับมาใช้ gemini-1.5-flash ที่เป็นตัวฟรีมาตรฐาน
+            # เปลี่ยนมาใช้รุ่น 2.5-flash ซึ่งเป็นรุ่นฟรีตัวล่าสุดและมีความเสถียรที่สุด
             response = client.models.generate_content(
-                model='gemini-1.5-flash', 
+                model='gemini-2.5-flash', 
                 contents=f"คุณคือผู้เชี่ยวชาญด้านกฎหมายอาหาร หน้าที่ของคุณคือ: {source['prompt']} \nตอบเฉพาะรูปแบบ JSON เท่านั้น ดังนี้: {{\"updated\": true/false, \"detail\": \"รายละเอียดที่พบ\"}}"
             )
             
-            # ทำความสะอาดข้อความให้เป็น JSON
             text = response.text.replace("```json", "").replace("```", "").strip()
             data = json.loads(text)
             
@@ -69,12 +68,12 @@ def check_regulations():
                 "name": source["name"],
                 "status": "failed",
                 "updated": False,
-                "detail": f"การตรวจสอบล้มเหลว: {e}",
+                "detail": f"การตรวจสอบล้มเหลว: จำเป็นต้องตรวจสอบด้วยมนุษย์",
                 "checked_at": str(date.today())
             }
             results.append(result_entry)
 
-        # หน่วงเวลา 5 วินาที เพื่อไม่ให้ API ทำงานหนักเกินไปจนโดนบล็อก
+        # พัก 5 วินาที เพื่อไม่ให้ความเร็วเกินโควต้าที่ระบบตั้งไว้
         print("พัก 5 วินาทีเพื่อป้องกัน Rate Limit...")
         time.sleep(5)
 
