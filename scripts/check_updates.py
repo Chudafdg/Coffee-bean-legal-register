@@ -1,11 +1,10 @@
 import os
 import json
 from datetime import date
-import google.generativeai as genai
+from google import genai
 
-# นำกุญแจ API มาใช้งาน
-genai.configure(api_key=os.environ["GEMINI_API_KEY"])
-model = genai.GenerativeModel('gemini-1.5-flash')
+# นำกุญแจ API มาใช้งานด้วยไลบรารีเวอร์ชันใหม่
+client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
 # ตั้งค่าคีย์เวิร์ดดักจับในราชกิจจานุเบกษา และ Codex
 SOURCES = [
@@ -31,19 +30,19 @@ def check_regulations():
     results = []
     has_updates = False
     update_summary = []
-    error_summary = [] # เก็บรายการที่เกิดความล้มเหลว
+    error_summary = [] 
 
     for source in SOURCES:
         print(f"กำลังตรวจสอบ: {source['name']}")
         try:
-            # สั่ง Gemini ให้ประเมินข้อมูล
-            response = model.generate_content(
-                f"คุณคือผู้เชี่ยวชาญด้านกฎหมายอาหาร หน้าที่ของคุณคือ: {source['prompt']} \nตอบเฉพาะรูปแบบ JSON เท่านั้น ดังนี้: {{\"updated\": true/false, \"detail\": \"รายละเอียดที่พบ\"}}"
+            # สั่ง Gemini ให้ประเมินข้อมูลด้วยคำสั่งเวอร์ชันใหม่
+            response = client.models.generate_content(
+                model='gemini-2.0-flash', 
+                contents=f"คุณคือผู้เชี่ยวชาญด้านกฎหมายอาหาร หน้าที่ของคุณคือ: {source['prompt']} \nตอบเฉพาะรูปแบบ JSON เท่านั้น ดังนี้: {{\"updated\": true/false, \"detail\": \"รายละเอียดที่พบ\"}}"
             )
             
             # ทำความสะอาดข้อความให้เป็น JSON
-            text = response.text.replace("```json", "").replace("
-```", "").strip()
+            text = response.text.replace("```json", "").replace("```", "").strip()
             data = json.loads(text)
             
             result_entry = {
@@ -93,7 +92,6 @@ def check_regulations():
         "sources": results
     }
 
-    # ตรวจสอบว่ามีโฟลเดอร์ data/ หรือไม่ ถ้าไม่มีให้สร้างขึ้นมา
     if not os.path.exists('data'):
         os.makedirs('data')
 
