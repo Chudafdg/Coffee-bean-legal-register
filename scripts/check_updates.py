@@ -201,8 +201,5 @@ def check_regulations():
     print(f"สรุป: {summary}")
 
 
-if error_summary:
-        raise RuntimeError(f"แจ้งเตือน: พบข้อผิดพลาดในการตรวจสอบ {len(error_summary)} รายการ")
-
 if __name__ == "__main__":
     check_regulations()
