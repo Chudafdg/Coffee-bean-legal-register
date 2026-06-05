@@ -7,17 +7,22 @@ import google.generativeai as genai
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 model = genai.GenerativeModel('gemini-1.5-flash')
 
-# ตั้งค่าคีย์เวิร์ดดักจับในราชกิจจานุเบกษา
+# ตั้งค่าคีย์เวิร์ดดักจับในราชกิจจานุเบกษา และ Codex
 SOURCES = [
     {
         "id": "ราชกิจจา_มาตรฐานกาแฟ",
-        "name": "มาตรฐานสินค้าเกษตร. 5700 กาแฟโรบัสต้า",
+        "name": "มกษ. 5700 กาแฟโรบัสต้า",
         "prompt": "ค้นหาข้อมูลล่าสุดจากเว็บไซต์ราชกิจจานุเบกษา เกี่ยวกับ 'มาตรฐานสินค้าเกษตร กาแฟ' หรือ 'มกษ. 5700' มีประกาศฉบับใหม่ที่อัปเดตกว่าปี 2561 หรือไม่ ตอบผลลัพธ์สั้นๆ"
     },
     {
         "id": "ราชกิจจา_สธ_สารพิษ",
-        "name": "ประกาศ สธ. สารพิษตกค้าง/ปนเปื้อนในกาแฟ/เมล็ดกาแฟ/กาแฟ",
+        "name": "ประกาศ สธ. สารพิษตกค้าง/ปนเปื้อนในกาแฟดิบ",
         "prompt": "ค้นหาข้อมูลล่าสุดจากเว็บไซต์ราชกิจจานุเบกษา เกี่ยวกับ 'ประกาศกระทรวงสาธารณสุข สารพิษตกค้าง' ที่เกี่ยวกับเมล็ดกาแฟ มีฉบับใหม่กว่าปี 2568 หรือไม่ ตอบผลลัพธ์สั้นๆ"
+    },
+    {
+        "id": "codex_cxc27",
+        "name": "Codex CXC 27-1981 (SB 07/16)",
+        "prompt": "ค้นหาข้อมูลล่าสุดเกี่ยวกับมาตรฐาน Codex 'CXC 27-1981' หรือ 'Code of Practice for the Prevention and Reduction of Ochratoxin A Contamination in Coffee' มีการปรับปรุงฉบับใหม่ (Revision) หรือไม่ ตอบผลลัพธ์สั้นๆ"
     }
 ]
 
@@ -37,13 +42,14 @@ def check_regulations():
             )
             
             # ทำความสะอาดข้อความให้เป็น JSON
-            text = response.text.replace("```json", "").replace("```", "").strip()
+            text = response.text.replace("```json", "").replace("
+```", "").strip()
             data = json.loads(text)
             
             result_entry = {
                 "id": source["id"],
                 "name": source["name"],
-                "status": "success", # ระบุว่าสำเร็จ
+                "status": "success",
                 "updated": data.get("updated", False),
                 "detail": data.get("detail", "ไม่พบข้อมูลใหม่"),
                 "checked_at": str(date.today())
@@ -62,7 +68,7 @@ def check_regulations():
             result_entry = {
                 "id": source["id"],
                 "name": source["name"],
-                "status": "failed", # ระบุสถานะว่าล้มเหลว
+                "status": "failed",
                 "updated": False,
                 "detail": f"การตรวจสอบล้มเหลว: จำเป็นต้องตรวจสอบด้วยมนุษย์",
                 "checked_at": str(date.today())
@@ -82,18 +88,20 @@ def check_regulations():
     output = {
         "last_checked": str(date.today()),
         "has_updates": has_updates,
-        "has_errors": len(error_summary) > 0, # ฟลัดแจ้งหน้าเว็บว่ามี Error
+        "has_errors": len(error_summary) > 0,
         "update_summary": final_summary.strip(" | "),
         "sources": results
     }
+
+    # ตรวจสอบว่ามีโฟลเดอร์ data/ หรือไม่ ถ้าไม่มีให้สร้างขึ้นมา
+    if not os.path.exists('data'):
+        os.makedirs('data')
 
     with open("data/regulations.json", "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
         
     print("ตรวจสอบและบันทึกผลเสร็จสิ้น")
 
-    # ถ้าระบบพบข้อผิดพลาด ให้บังคับสคริปต์หยุดทำงานแบบ Error
-    # เพื่อกระตุ้นให้ระบบ GitHub Actions ส่งอีเมลแจ้งเตือน
     if error_summary:
         raise RuntimeError(f"แจ้งเตือน: พบข้อผิดพลาดในการตรวจสอบ {len(error_summary)} รายการ")
 
