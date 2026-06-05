@@ -83,6 +83,19 @@
     {
       "date": "2026-06-05",
       "has_updates": false,
+      "summary": "ตรวจสอบเสร็จ — ไม่สามารถตรวจสอบได้ 6 รายการ",
+      "errors": [
+        "มกษ. 5700 กาแฟโรบัสต้า",
+        "ประกาศ สธ. ฉ.460 สารพิษตกค้าง",
+        "ประกาศ สธ. สารปนเปื้อน OTA/Aflatoxin",
+        "Codex CXC 27-1981 (SB 07/16)",
+        "Codex Stan 193 Contaminants",
+        "Codex MRL Pesticides in Coffee (CXL)"
+      ]
+    },
+    {
+      "date": "2026-06-05",
+      "has_updates": false,
       "summary": "ตรวจสอบเสร็จ (ไม่สามารถตรวจสอบได้ 6 รายการ: มกษ. 5700 กาแฟโรบัสต้า, ประกาศ สธ. ฉ.460 สารพิษตกค้าง, ประกาศ สธ. สารปนเปื้อน (OTA/Aflatoxin), Codex CXC 27-1981 (SB 07/16), Codex Stan 193 Contaminants, Codex MRL Pesticides in Coffee (CXL))",
       "errors": [
         "มกษ. 5700 กาแฟโรบัสต้า",
