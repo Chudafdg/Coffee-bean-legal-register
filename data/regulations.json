@@ -1,5 +1,5 @@
 {
-  "last_checked": "2026-06-05",
+  "last_checked": "2026-06-08",
   "has_updates": false,
   "update_summary": "ตรวจสอบเสร็จ — error 6/6 รายการ",
   "error_count": 6,
@@ -10,7 +10,7 @@
       "version": "error",
       "id": "มกษ_5700",
       "name": "มกษ. 5700 กาแฟโรบัสต้า",
-      "checked_at": "2026-06-05"
+      "checked_at": "2026-06-08"
     },
     {
       "updated": false,
@@ -18,7 +18,7 @@
       "version": "error",
       "id": "สธ_สารพิษ",
       "name": "ประกาศ สธ. สารพิษตกค้าง",
-      "checked_at": "2026-06-05"
+      "checked_at": "2026-06-08"
     },
     {
       "updated": false,
@@ -26,7 +26,7 @@
       "version": "error",
       "id": "สธ_สารปนเปื้อน",
       "name": "ประกาศ สธ. สารปนเปื้อน OTA/Aflatoxin",
-      "checked_at": "2026-06-05"
+      "checked_at": "2026-06-08"
     },
     {
       "updated": false,
@@ -34,7 +34,7 @@
       "version": "error",
       "id": "codex_cxc27",
       "name": "Codex CXC 27-1981 (SB 07/16)",
-      "checked_at": "2026-06-05"
+      "checked_at": "2026-06-08"
     },
     {
       "updated": false,
@@ -42,7 +42,7 @@
       "version": "error",
       "id": "codex_stan193",
       "name": "Codex Stan 193 Contaminants",
-      "checked_at": "2026-06-05"
+      "checked_at": "2026-06-08"
     },
     {
       "updated": false,
@@ -50,10 +50,23 @@
       "version": "error",
       "id": "codex_cxl",
       "name": "Codex MRL Pesticides in Coffee (CXL)",
-      "checked_at": "2026-06-05"
+      "checked_at": "2026-06-08"
     }
   ],
   "changelog": [
+    {
+      "date": "2026-06-08",
+      "has_updates": false,
+      "summary": "ตรวจสอบเสร็จ — error 6/6 รายการ",
+      "errors": [
+        "มกษ. 5700 กาแฟโรบัสต้า",
+        "ประกาศ สธ. สารพิษตกค้าง",
+        "ประกาศ สธ. สารปนเปื้อน OTA/Aflatoxin",
+        "Codex CXC 27-1981 (SB 07/16)",
+        "Codex Stan 193 Contaminants",
+        "Codex MRL Pesticides in Coffee (CXL)"
+      ]
+    },
     {
       "date": "2026-06-05",
       "has_updates": false,
