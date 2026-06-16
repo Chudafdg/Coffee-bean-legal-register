@@ -34,6 +34,7 @@ jobs:
         run: |
           git config user.email "bot@github.com"
           git config user.name "Regulation Bot"
+          git pull --rebase origin main
           git add data/regulations.json
           git diff --staged --quiet || git commit -m "update: weekly check $(date +%Y-%m-%d)"
           git push
