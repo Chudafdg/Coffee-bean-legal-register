@@ -152,17 +152,17 @@ footer a:hover{color:rgba(255,255,255,.8)}
     <h1>ติดตามกฎหมายและมาตรฐาน<br>เมล็ดกาแฟโรบัสต้า</h1>
     <p class="hero-sub">กฎหมายที่บังคับใช้กับ <strong style="color:rgba(255,255,255,.85)">เมล็ดกาแฟดิบ (green bean)</strong> — ไม่รวมประกาศที่มุ่งเน้นกาแฟคั่วหรือเครื่องดื่ม — ประกาศ สธ. ฉ.197/276/330 ถูกคัดออกเพราะเน้นกาแฟพร้อมบริโภค</p>
     <div class="hero-stats">
-      <div><div class="stat-num" id="statTotal">9</div><div class="stat-lbl">มาตรฐานทั้งหมด</div></div>
-      <div><div class="stat-num" style="color:#f0c060" id="statUpdated">2</div><div class="stat-lbl">มีการเปลี่ยนแปลง</div></div>
-      <div><div class="stat-num" style="color:rgba(255,255,255,.45);font-size:14px;padding-top:7px" id="statDate">2 มิ.ย. 2568</div><div class="stat-lbl">ตรวจสอบล่าสุด</div></div>
+      <div><div class="stat-num" id="statTotal">8</div><div class="stat-lbl">มาตรฐานทั้งหมด</div></div>
+      <div><div class="stat-num" style="color:#f0c060" id="statUpdated">—</div><div class="stat-lbl">มีการเปลี่ยนแปลง</div></div>
+      <div><div class="stat-num" style="color:rgba(255,255,255,.45);font-size:14px;padding-top:7px" id="statDate">กำลังโหลด...</div><div class="stat-lbl">ตรวจสอบล่าสุด</div></div>
     </div>
   </div>
 </section>
 
 <div class="alert-wrap">
-  <div class="alert">
+  <div class="alert hidden" id="alertBox">
     <div class="alert-ico">⚠</div>
-    <div><strong>พบการเปลี่ยนแปลง 3 รายการ</strong> — ประกาศ สธ. ฉ.460 (2568) บังคับใช้ใหม่, มกษ. 5701-2565 (ฉบับปรับปรุง) และ Codex CXC 27 (Draft Amendment)</div>
+    <div><strong>กำลังโหลด...</strong></div>
   </div>
 </div>
 
@@ -171,7 +171,7 @@ footer a:hover{color:rgba(255,255,255,.8)}
     <div class="tcard-hdr">
       <span class="tcard-title">รายการกฎหมายและมาตรฐาน</span>
       <span class="cpill" id="countPill">9 รายการ</span>
-      <span class="last-upd" id="lastUpd">อัปเดต: 2 มิ.ย. 2568</span>
+      <span class="last-upd" id="lastUpd">กำลังโหลด...</span>
     </div>
     <div style="overflow-x:auto">
       <table>
@@ -392,12 +392,17 @@ async function loadFromJSON(){
 
     // อัปเดต header stats
     if(data.last_checked){
-      // แปลง 2026-06-05 → แสดงเป็นวันที่ไทย
-      const d = new Date(data.last_checked);
+      const d = new Date(data.last_checked+'T00:00:00');
       const dateStr = d.toLocaleDateString('th-TH',{day:'numeric',month:'short',year:'numeric'});
       document.getElementById('statDate').textContent = dateStr;
       document.getElementById('lastUpd').textContent = 'อัปเดต: '+dateStr;
     }
+
+    // อัปเดตจำนวนรายการที่มีการเปลี่ยนแปลง
+    const updatedCount = data.sources
+      ? data.sources.filter(s => s.updated).length
+      : 0;
+    document.getElementById('statUpdated').textContent = updatedCount;
 
     // อัปเดต alert banner ถ้ามีการเปลี่ยนแปลง
     const alertBox = document.getElementById('alertBox');
@@ -471,7 +476,8 @@ async function askAI(prompt){
   }
 }
 
-renderTable('all');renderChanges();
+renderTable('all');
+loadFromJSON(); // ดึงข้อมูลจริงจาก data/regulations.json
 </script>
 </body>
 </html>
