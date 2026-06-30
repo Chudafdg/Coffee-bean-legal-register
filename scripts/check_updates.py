@@ -7,7 +7,7 @@ import urllib.error
 from datetime import date
 
 GEMINI_API_KEY = os.environ["GOOGLE_AI_KEY"]
-GEMINI_MODEL = "gemini-2.0-flash"
+GEMINI_MODEL = "gemini-2.5-flash"
 GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
 
 SOURCES = [
