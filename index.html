@@ -1,62 +1,483 @@
-name: Weekly Regulation Check
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>กฎหมายเมล็ดกาแฟโรบัสต้า</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Noto+Serif+Thai:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g900:#1a2e1a;--g800:#234023;--g700:#2d5a2d;--g600:#3a7a3a;
+  --g500:#4a9a4a;--g400:#6ab86a;--g200:#b8ddb8;--g100:#d6edd6;--g50:#eef7ee;--g25:#f6fbf6;
+  --white:#fff;--gray900:#111816;--gray700:#374040;--gray500:#6b7575;--gray300:#c4cdcd;--gray100:#f0f3f3;
+  --amber:#c47c1a;--amberbg:#fef8ee;--red:#b03232;--redbg:#fdf1f1;
+  --font:'Sarabun',sans-serif;--serif:'Noto Serif Thai',serif;
+  --radius:10px;--rsm:6px;--shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.04)
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--gray100);color:var(--gray900);font-size:15px;line-height:1.6;min-height:100vh}
 
-on:
-  schedule:
-    - cron: '0 1 * * 1'   # ทุกวันจันทร์ 08:00 น. ไทย (UTC+7)
-  workflow_dispatch:        # รันมือได้ทันที
+.topbar{background:var(--g800);position:sticky;top:0;z-index:100;border-bottom:2px solid var(--g700)}
+.tb-inner{max-width:1120px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;height:54px;gap:0}
+.tb-logo{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:600;color:#fff;text-decoration:none;padding-right:1.5rem;border-right:1px solid rgba(255,255,255,.15);white-space:nowrap;flex-shrink:0}
+.logo-mark{width:26px;height:26px;background:var(--g500);border-radius:50% 50% 50% 0;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.tb-filters{display:flex;align-items:center;gap:2px;padding:0 1rem;flex:1;overflow-x:auto}
+.tf{font-family:var(--font);font-size:12.5px;padding:5px 12px;border-radius:99px;border:none;background:transparent;color:rgba(255,255,255,.6);cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.tf:hover{background:rgba(255,255,255,.08);color:#fff}
+.tf.active{background:rgba(255,255,255,.16);color:#fff;font-weight:500}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.check-btn{font-family:var(--font);font-size:12.5px;font-weight:500;padding:6px 14px;border-radius:99px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:#fff;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px}
+.check-btn:hover{background:rgba(255,255,255,.2)}
+.check-btn:disabled{opacity:.5;cursor:not-allowed}
+.spin{width:11px;height:11px;border:2px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-jobs:
-  check-regulations:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+.hero{background:linear-gradient(135deg,var(--g900) 0%,var(--g700) 100%);padding:2.5rem 0 2rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 50%,rgba(74,154,74,.12) 0%,transparent 60%)}
+.hero-inner{max-width:1120px;margin:0 auto;padding:0 1.5rem;position:relative}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--g400);font-weight:600;margin-bottom:8px}
+.hero h1{font-family:var(--serif);font-size:26px;font-weight:600;color:#fff;line-height:1.3;margin-bottom:6px}
+.hero-sub{font-size:13px;color:rgba(255,255,255,.55);margin-bottom:1.75rem;max-width:560px}
+.hero-stats{display:flex;gap:2rem;flex-wrap:wrap}
+.stat-num{font-size:24px;font-weight:700;color:#fff;line-height:1}
+.stat-lbl{font-size:11.5px;color:rgba(255,255,255,.5);margin-top:3px}
 
-    steps:
-      - name: ดึงข้อมูลโปรเจกต์มาเตรียมพร้อม
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+.alert-wrap{max-width:1120px;margin:0 auto;padding:1.25rem 1.5rem 0}
+.alert{background:#fffbf2;border:1px solid #f0d080;border-left:3px solid var(--amber);border-radius:var(--rsm);padding:10px 14px;display:flex;align-items:flex-start;gap:9px;font-size:13px}
+.alert.hidden{display:none}
+.alert-ico{color:var(--amber);flex-shrink:0;line-height:1.6}
+.alert strong{font-weight:600;color:var(--amber)}
 
-      - name: ติดตั้ง Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+.main{max-width:1120px;margin:0 auto;padding:1.25rem 1.5rem 3rem}
 
-      - name: ติดตั้งเครื่องมือ Google AI
-        run: pip install requests
+.tcard{background:var(--white);border:1px solid var(--gray300);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:1rem;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.tcard-hdr{padding:14px 18px 12px;border-bottom:1px solid #eef2ee;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tcard-title{font-size:12.5px;font-weight:600;color:var(--gray500);text-transform:uppercase;letter-spacing:.07em}
+.cpill{background:var(--g50);color:var(--g700);font-size:11px;font-weight:600;padding:2px 9px;border-radius:99px;border:1px solid var(--g100)}
+.last-upd{margin-left:auto;font-size:12px;color:var(--gray500)}
 
-      - name: เริ่มตรวจสอบกฎหมาย
-        env:
-          GOOGLE_AI_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python scripts/check_updates.py
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--g25)}
+thead th{padding:9px 14px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--g700);border-bottom:1px solid var(--g100);white-space:nowrap}
+tbody tr{border-bottom:1px solid #f2f5f2;transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--g25)}
+td{padding:12px 14px;vertical-align:top}
+.reg-name{font-size:13.5px;font-weight:600;color:var(--gray900);line-height:1.4}
+.reg-scope{font-size:12px;color:var(--gray500);margin-top:3px;line-height:1.5}
+.reg-links{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.reg-link{display:inline-flex;align-items:center;gap:3px;font-size:11px;color:var(--g600);text-decoration:none;padding:2px 8px;border-radius:3px;border:1px solid var(--g100);background:var(--g25);transition:all .12s}
+.reg-link:hover{background:var(--g100);color:var(--g800)}
+.reg-link.pdf{border-color:#f0c0c0;background:#fdf8f8;color:#b03232}
+.reg-link.pdf:hover{background:#fdeaea}
+.cat{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500;white-space:nowrap}
+.cat-สธ{background:#edf2fc;color:#2a4a8a}
+.cat-กษ{background:var(--g50);color:var(--g700)}
+.cat-codex{background:#f3eefa;color:#5a3a8a}
+.ver{font-size:12px;color:var(--gray500)}
+.srow{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dg{background:#3a9a55}.da{background:#c47c1a}.dr{background:var(--red)}
+.slbl{font-size:12px;color:var(--gray500)}
+.badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em}
+.bnew{background:var(--redbg);color:var(--red);border:1px solid #f0c0c0}
+.bchg{background:var(--amberbg);color:var(--amber);border:1px solid #f0d880}
+.upd-note{font-size:11px;color:var(--amber);margin-top:4px;line-height:1.4}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{font-size:11px;background:var(--gray100);color:var(--gray500);padding:2px 7px;border-radius:3px;border:1px solid var(--gray300)}
 
-      - name: บันทึกผลการอัปเดตลงระบบ
-        run: |
-          git config user.email "bot@github.com"
-          git config user.name "Regulation Bot"
-          git pull origin main --no-rebase --no-edit
-          git add data/regulations.json
-          git diff --staged --quiet || git commit -m "update: weekly check $(date +%Y-%m-%d)"
-          git push
+.bgrid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+@media(max-width:700px){.bgrid{grid-template-columns:1fr}}
+.panel{background:var(--white);border:1px solid var(--gray300);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;animation:fadeUp .3s ease .05s both}
+.panel-hdr{padding:12px 16px;border-bottom:1px solid #f0f3f0;display:flex;align-items:center;gap:8px}
+.pico{width:26px;height:26px;border-radius:7px;background:var(--g50);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.ptitle{font-size:13px;font-weight:600;color:var(--gray700)}
+.pbody{padding:14px 16px}
+.clist{display:flex;flex-direction:column}
+.ci{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #f2f5f2}
+.ci:last-child{border-bottom:none;padding-bottom:0}
+.cdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.ctitle{font-size:13px;font-weight:500;color:var(--gray900);line-height:1.4}
+.cmeta{font-size:11px;color:var(--gray500);margin-top:2px}
 
-      - name: ส่งอีเมลแจ้งเตือน
-        if: always()
-        uses: dawidd6/action-send-mail@v4
-        with:
-          server_address: smtp.gmail.com
-          server_port: 587
-          username: ${{ secrets.GMAIL_USER }}
-          password: ${{ secrets.GMAIL_APP_PASSWORD }}
-          subject: "[กาแฟโรบัสต้า] ผลตรวจสอบกฎหมาย"
-          to: ${{ secrets.NOTIFY_EMAIL }}
-          cc: ${{ secrets.CC_EMAIL }}
-          from: Regulation Bot <${{ secrets.GMAIL_USER }}>
-          body: |
-            ระบบตรวจสอบกฎหมายเมล็ดกาแฟโรบัสต้า
-            =======================================
-            สถานะ: ${{ job.status }}
+.src-link{display:flex;align-items:center;gap:8px;text-decoration:none;padding:8px 10px;border-radius:var(--rsm);border:1px solid var(--gray300);background:var(--gray100);transition:background .12s;margin-bottom:6px}
+.src-link:hover{background:var(--g50)}
+.src-link:last-child{margin-bottom:0}
+.src-ico{font-size:16px;flex-shrink:0}
+.src-name{font-size:13px;font-weight:500;color:var(--gray900)}
+.src-desc{font-size:11px;color:var(--gray500)}
 
-            ดูรายละเอียด: https://${{ github.repository_owner }}.github.io/Coffee-bean-legal-register
-            ดู log: https://github.com/${{ github.repository }}/actions
+.ai-panel{background:var(--white);border:1px solid var(--gray300);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;animation:fadeUp .3s ease .1s both}
+.ai-btns{display:flex;gap:8px;flex-wrap:wrap;padding:14px 16px 0}
+.ai-btn{font-family:var(--font);font-size:12.5px;padding:7px 14px;border-radius:var(--rsm);border:1px solid var(--gray300);background:var(--gray100);color:var(--gray700);cursor:pointer;transition:all .15s;line-height:1.4;text-align:left}
+.ai-btn:hover{background:var(--g50);border-color:var(--g200);color:var(--g700)}
+.ai-out{padding:12px 16px}
+.ai-result{font-size:13px;color:var(--gray900);line-height:1.75;background:var(--g25);border:1px solid var(--g100);border-radius:var(--rsm);padding:12px 14px;display:none;max-height:320px;overflow-y:auto;white-space:pre-wrap}
+.ai-load{display:none;align-items:center;gap:8px;font-size:13px;color:var(--gray500);padding:12px 0}
+.spin-ai{width:14px;height:14px;border:2px solid var(--gray300);border-top-color:var(--g500);border-radius:50%;animation:spin .7s linear infinite}
+.ai-note{font-size:12px;color:var(--gray700);background:var(--amberbg);border:1px solid #f0d880;border-radius:var(--rsm);padding:10px 12px;display:none;margin-top:4px}
+
+footer{background:var(--g900);color:rgba(255,255,255,.4);padding:1.25rem 0;font-size:12px}
+footer .fi{max-width:1120px;margin:0 auto;padding:0 1.5rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+footer a{color:rgba(255,255,255,.5);text-decoration:none}
+footer a:hover{color:rgba(255,255,255,.8)}
+@media(max-width:900px){thead th:nth-child(5),td:nth-child(5){display:none}}
+@media(max-width:700px){thead th:nth-child(3),td:nth-child(3),thead th:nth-child(4),td:nth-child(4){display:none}.hero h1{font-size:20px}.tb-filters{display:none}}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="tb-inner">
+    <a class="tb-logo" href="#"><div class="logo-mark">☕</div>กฎหมายกาแฟโรบัสต้า</a>
+    <div class="tb-filters">
+      <button class="tf active" onclick="setFilter('all',this)">ทั้งหมด</button>
+      <button class="tf" onclick="setFilter('สธ',this)">กระทรวงสาธารณสุข</button>
+      <button class="tf" onclick="setFilter('กษ',this)">กระทรวงเกษตร</button>
+      <button class="tf" onclick="setFilter('codex',this)">Codex / สากล</button>
+      <button class="tf" onclick="setFilter('updated',this)">⚑ อัปเดต</button>
+    </div>
+    <div class="tb-right">
+      <div class="spin" id="spin"></div>
+      <button class="check-btn" id="checkBtn" onclick="doCheck()">↻ ตรวจสอบ</button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Robusta Coffee Bean · Thai &amp; International Standards</div>
+    <h1>ติดตามกฎหมายและมาตรฐาน<br>เมล็ดกาแฟโรบัสต้า</h1>
+    <p class="hero-sub">กฎหมายที่บังคับใช้กับ <strong style="color:rgba(255,255,255,.85)">เมล็ดกาแฟดิบ (green bean)</strong> — ไม่รวมประกาศที่มุ่งเน้นกาแฟคั่วหรือเครื่องดื่ม — ประกาศ สธ. ฉ.197/276/330 ถูกคัดออกเพราะเน้นกาแฟพร้อมบริโภค</p>
+    <div class="hero-stats">
+      <div><div class="stat-num" id="statTotal">8</div><div class="stat-lbl">มาตรฐานทั้งหมด</div></div>
+      <div><div class="stat-num" style="color:#f0c060" id="statUpdated">—</div><div class="stat-lbl">มีการเปลี่ยนแปลง</div></div>
+      <div><div class="stat-num" style="color:rgba(255,255,255,.45);font-size:14px;padding-top:7px" id="statDate">กำลังโหลด...</div><div class="stat-lbl">ตรวจสอบล่าสุด</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="alert-wrap">
+  <div class="alert hidden" id="alertBox">
+    <div class="alert-ico">⚠</div>
+    <div><strong>กำลังโหลด...</strong></div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="tcard">
+    <div class="tcard-hdr">
+      <span class="tcard-title">รายการกฎหมายและมาตรฐาน</span>
+      <span class="cpill" id="countPill">9 รายการ</span>
+      <span class="last-upd" id="lastUpd">กำลังโหลด...</span>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr>
+          <th style="width:38%">กฎหมาย / มาตรฐาน</th>
+          <th style="width:12%">ประเภท</th>
+          <th style="width:13%">ฉบับ</th>
+          <th style="width:11%">สถานะ</th>
+          <th style="width:26%">ครอบคลุม</th>
+        </tr></thead>
+        <tbody id="regBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="bgrid">
+    <div class="panel">
+      <div class="panel-hdr"><div class="pico">📋</div><span class="ptitle">บันทึกการเปลี่ยนแปลง</span></div>
+      <div class="pbody"><div class="clist" id="changeList"></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-hdr"><div class="pico">📚</div><span class="ptitle">แหล่งอ้างอิงหลัก</span></div>
+      <div class="pbody">
+        <a class="src-link" href="https://food.fda.moph.go.th/food-law/f2-coffee" target="_blank">
+          <span class="src-ico">🏛️</span><div><div class="src-name">กองอาหาร อ.ย. — หน้ากฎหมายกาแฟ</div><div class="src-desc">food.fda.moph.go.th · ประกาศ สธ. ฉ.197, 276, 330 พร้อม PDF ดาวน์โหลด</div></div>
+        </a>
+        <a class="src-link" href="https://food.fda.moph.go.th/food-law/category/contaminated-01/" target="_blank">
+          <span class="src-ico">⚗️</span><div><div class="src-name">อ.ย. — มาตรฐานอาหารที่มีสารปนเปื้อน</div><div class="src-desc">OTA, Aflatoxin, โลหะหนักในอาหาร รวมเมล็ดกาแฟ</div></div>
+        </a>
+        <a class="src-link" href="https://food.fda.moph.go.th/food-law/category/contaminants-02/" target="_blank">
+          <span class="src-ico">🧪</span><div><div class="src-name">อ.ย. — มาตรฐานอาหารที่มีสารพิษ-ยาสัตว์ตกค้าง</div><div class="src-desc">ค่า MRL สารเคมีกำจัดศัตรูพืชในเมล็ดกาแฟ</div></div>
+        </a>
+        <a class="src-link" href="https://www.acfs.go.th/standard/" target="_blank">
+          <span class="src-ico">🌿</span><div><div class="src-name">มกอช. — มาตรฐานสินค้าเกษตร</div><div class="src-desc">acfs.go.th · มกษ. 5701, 9002 และ พ.ร.บ. มาตรฐานสินค้าเกษตร</div></div>
+        </a>
+        <a class="src-link" href="https://www.fao.org/fao-who-codexalimentarius/codex-texts/list-standards/en/" target="_blank">
+          <span class="src-ico">🌐</span><div><div class="src-name">Codex Alimentarius — Standards</div><div class="src-desc">fao.org · Codex Stan 193, CXC 27-1981, CXL</div></div>
+        </a>
+        <div style="font-size:11px;color:var(--gray500);margin-top:8px;padding:8px 10px;background:var(--amberbg);border-radius:var(--rsm);border:1px solid #f0d880;">
+          💡 URL ที่มี <strong style="color:#b03232">🔴 PDF</strong> ในตารางชี้ตรงถึงเอกสาร — URL ที่มีเฉพาะ ↗ ชี้ไปหน้าหมวดหมู่ (เว็บราชการไม่มี permalink ตรง) คุณช่วยเพิ่ม URL PDF จริงได้ครับ
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-panel">
+    <div class="panel-hdr"><div class="pico">🤖</div><span class="ptitle">วิเคราะห์ด้วย AI</span></div>
+    <div class="ai-btns">
+      <button class="ai-btn" onclick="askAI('สรุปกฎหมายและมาตรฐานที่สำคัญที่สุดสำหรับผู้ส่งออกเมล็ดกาแฟโรบัสต้าดิบ (green bean) จากไทย เน้นเฉพาะที่เกี่ยวกับเมล็ดดิบ')">📦 สรุปสำหรับผู้ส่งออก</button>
+      <button class="ai-btn" onclick="askAI('เปรียบเทียบค่า MRL ปริมาณสารพิษตกค้างสูงสุดในเมล็ดกาแฟโรบัสต้าดิบ ระหว่างมาตรฐานไทย (มกษ.9002 และประกาศ สธ.) กับ Codex CXL ว่าต่างกันอย่างไร และค่าไหนเข้มงวดกว่า')">⚖️ เปรียบเทียบ MRL ไทย vs Codex</button>
+      <button class="ai-btn" onclick="askAI('ค่าขีดจำกัด Ochratoxin A (OTA) และ Aflatoxin ในเมล็ดกาแฟโรบัสต้าดิบตามมาตรฐานปัจจุบันคือเท่าไร และ Draft Amendment ของ Codex SB 07/16 จะเปลี่ยนแปลงอะไรบ้าง')">🧫 OTA / Aflatoxin limits</button>
+      <button class="ai-btn" onclick="askAI('มกษ. 5701-2565 กาแฟโรบัสต้า กำหนดเกณฑ์การแบ่งเกรด ข้อบกพร่อง (defect count) และความชื้นสำหรับเมล็ดดิบอย่างไร สรุปเป็นตารางเปรียบเทียบเกรด 1 2 3')">🏷️ เกณฑ์เกรด มกษ.5701</button>
+      <button class="ai-btn" onclick="askAI('ประกาศกระทรวงสาธารณสุข ฉบับที่ 197 พ.ศ.2543 เรื่องกาแฟ ครอบคลุมเมล็ดกาแฟดิบ (green bean, unroasted) ด้วยหรือไม่ และกำหนดมาตรฐานอะไรสำหรับเมล็ดดิบบ้าง')">📜 ประกาศ สธ.197 ครอบคลุมเมล็ดดิบไหม</button>
+    </div>
+    <div class="ai-out">
+      <div class="ai-load" id="aiLoad"><div class="spin-ai"></div><span>กำลังวิเคราะห์...</span></div>
+      <div class="ai-result" id="aiResult"></div>
+      <div class="ai-note" id="aiNote">⚠ ฟีเจอร์นี้ต้องเปิดผ่าน GitHub Pages เท่านั้น — เบราว์เซอร์บล็อก API call จาก local file (CORS policy) โปรดดูคู่มือ SETUP_GUIDE.md สำหรับขั้นตอน deploy</div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="fi">
+    <span>แหล่งข้อมูล: <a href="https://food.fda.moph.go.th/food-law/f2-coffee" target="_blank">อ.ย. กองอาหาร</a> · <a href="https://www.acfs.go.th/standard/" target="_blank">มกอช.</a> · <a href="https://www.fao.org/fao-who-codexalimentarius" target="_blank">Codex Alimentarius</a></span>
+    <span>เฉพาะ green bean / dried bean — ไม่รวมเครื่องดื่มสำเร็จรูป</span>
+  </div>
+</footer>
+
+<script>
+const REGS = [
+  // ─── กระทรวงสาธารณสุข ───
+  // หมายเหตุ: ประกาศ สธ. ฉ.197/276/330 เรื่อง "กาแฟ" ถูกตัดออก
+  // เนื่องจากขอบเขตครอบคลุมกาแฟคั่วและเครื่องดื่มเป็นหลัก ไม่ใช่เมล็ดดิบโดยตรง
+  { cat:'สธ',
+    name:'ประกาศ สธ. เรื่อง อาหารที่มีสารปนเปื้อน (Contaminants in Food)',
+    scope:'กำหนดค่าสูงสุด OTA, Aflatoxin, โลหะหนัก ในอาหารรวมถึงเมล็ดกาแฟดิบ — บังคับใช้กับ green bean ด้วย',
+    ver:'ฉ.414 (2563) / ล่าสุด',
+    status:'stable',
+    chips:['OTA ≤10 µg/kg','Aflatoxin B1 ≤10 µg/kg','โลหะหนัก Pb, Cd'],
+    links:[
+      { url:'https://food.fda.moph.go.th/food-law/category/contaminated-01/', lbl:'↗ หมวดสารปนเปื้อน อ.ย.' },
+    ],
+    note:'⚠ รอ URL PDF ตรง — กรุณาเพิ่มเติม'
+  },
+  { cat:'สธ',
+    name:'ประกาศกระทรวงสาธารณสุข (ฉบับที่ 460) พ.ศ. 2568 เรื่อง อาหารที่มีสารพิษตกค้าง',
+    scope:'ค่า MRL สารเคมีกำจัดศัตรูพืชในอาหารรวมถึงเมล็ดกาแฟดิบ — ฉบับปัจจุบัน บังคับใช้ 2568',
+    ver:'ฉ.460 (2568)',
+    status:'new',
+    chips:['Chlorpyrifos','Imidacloprid','Endosulfan','MRL รายสาร อ้างอิง Codex'],
+    links:[
+      { url:'https://food.fda.moph.go.th/food-law/announ-moph-460', lbl:'↗ หน้าประกาศ ฉ.460 อ.ย.' },
+      { url:'https://food.fda.moph.go.th/media.php?id=783228253065322496&name=P460.pdf', lbl:'🔴 PDF ฉบับภาษาไทย', pdf:true },
+      { url:'https://food.fda.moph.go.th/media.php?id=798068356321255424&name=P460_EN.pdf', lbl:'🔴 PDF English', pdf:true },
+    ],
+    note:'ฉบับใหม่ล่าสุด พ.ศ. 2568 — ยกเลิกฉบับเดิม'
+  },
+  // ─── กระทรวงเกษตร ───
+  { cat:'กษ',
+    name:'มาตรฐานสินค้าเกษตร มกษ. 5701-2565 กาแฟโรบัสต้า',
+    scope:'เมล็ดกาแฟโรบัสต้าดิบ (green bean) โดยตรง — การแบ่งเกรด ข้อบกพร่อง ความชื้น บรรจุภัณฑ์',
+    ver:'มกษ. 5701-2565',
+    status:'new',
+    chips:['เกรด 1 / 2 / 3','defect count','ความชื้น ≤12.5%','การบรรจุ'],
+    links:[
+      { url:'https://www.acfs.go.th/standard/', lbl:'↗ มกอช. มาตรฐาน (ค้นหา 5701)' },
+      { url:'https://www.ratchakitcha.soc.go.th/DATA/PDF/2552/E/186/6.PDF', lbl:'🔴 PDF ราชกิจจา (ฉบับ 2552 — เก่า)', pdf:true },
+    ],
+    note:'ฉบับบังคับใช้ปัจจุบันคือ 2565 — PDF ราชกิจจาฉบับ 2552 เป็นฉบับเก่า รอ URL ฉบับ 2565'
+  },
+  { cat:'กษ',
+    name:'มาตรฐานสินค้าเกษตร มกษ. 9002 ปริมาณสารพิษตกค้างสูงสุดในสินค้าเกษตร',
+    scope:'ครอบคลุมเมล็ดกาแฟดิบ — ค่า MRL อ้างอิงตาม Codex CXL',
+    ver:'มกษ. 9002',
+    status:'stable',
+    chips:['MRL รายพืช','อ้างอิง Codex CXL','กาแฟโรบัสต้า'],
+    links:[
+      { url:'https://www.acfs.go.th/standard/', lbl:'↗ มกอช. มาตรฐาน (ค้นหา 9002)' },
+    ]
+  },
+  { cat:'กษ',
+    name:'พ.ร.บ. มาตรฐานสินค้าเกษตร พ.ศ. 2551 (แก้ไขเพิ่มเติม พ.ศ. 2562)',
+    scope:'กรอบกฎหมายบังคับใช้มาตรฐาน มกษ. ทั้งหมด รวมถึง มกษ. 5701',
+    ver:'แก้ไข 2562',
+    status:'stable',
+    chips:['กรอบกฎหมาย','การรับรอง Q','บทลงโทษ'],
+    links:[
+      { url:'https://www.acfs.go.th/law_regulation.php', lbl:'↗ มกอช. กฎหมาย' },
+    ]
+  },
+  // ─── Codex / สากล ───
+  { cat:'codex',
+    name:'Codex Stan 193 — General Standard for Contaminants and Toxins in Food and Feed',
+    scope:'กำหนด OTA และ Aflatoxin ในเมล็ดกาแฟดิบ (green bean) และคั่ว — ไทยใช้อ้างอิง',
+    ver:'CXS 193-1995 (Rev.2023)',
+    status:'stable',
+    chips:['OTA ≤10 µg/kg (green)','OTA ≤10 µg/kg (roasted)','Aflatoxin'],
+    links:[
+      { url:'https://www.fao.org/fao-who-codexalimentarius/codex-texts/list-standards/en/', lbl:'↗ Codex Standards List' },
+    ]
+  },
+  { cat:'codex',
+    name:'Codex Code of Practice for Coffee — CXC 27-1981 (SB 07/16)',
+    scope:'หลักปฏิบัติ GMP สำหรับ green coffee และ roasted coffee — การป้องกัน OTA',
+    ver:'Rev.2016 / Draft Amend.2024',
+    status:'updated',
+    chips:['Green coffee GMP','OTA prevention','Storage & Hygiene'],
+    links:[
+      { url:'https://www.fao.org/fao-who-codexalimentarius/codex-texts/codes-of-practice/en/', lbl:'↗ Codex Codes of Practice' },
+    ],
+    note:'Draft Amendment อยู่ระหว่างพิจารณาโดย CCCF 2024'
+  },
+  { cat:'codex',
+    name:'Codex Maximum Residue Limits for Pesticides in Coffee (CXL)',
+    scope:'ค่า MRL รายสารเคมีในเมล็ดกาแฟ — มกษ. 9002 ของไทยอ้างอิงฉบับนี้',
+    ver:'CXL 2024',
+    status:'stable',
+    chips:['Chlorpyrifos','Imidacloprid','Glyphosate','40+ สาร'],
+    links:[
+      { url:'https://www.fao.org/pesticide-residues-jmpr-database/en/', lbl:'↗ Codex Pesticide DB (JMPR)' },
+    ]
+  },
+];
+
+const CHANGES = [
+  { color:'#b03232', title:'ประกาศ สธ. ฉ.460 (2568) — อาหารที่มีสารพิษตกค้าง ฉบับใหม่บังคับใช้แล้ว', meta:'กระทรวงสาธารณสุข · 2568 · ยกเลิกฉบับเดิม — ครอบคลุม MRL กาแฟโรบัสต้าดิบ' },
+  { color:'#b03232', title:'มกษ. 5701-2565 — ฉบับปรับปรุงใหม่ บังคับใช้แล้ว', meta:'กระทรวงเกษตร · 2565 · ปรับเกณฑ์ข้อบกพร่อง, การแบ่งเกรด และความชื้น' },
+  { color:'#c47c1a', title:'Codex CXC 27 (SB 07/16) — Draft Amendment อยู่ระหว่างพิจารณา', meta:'Codex CCCF 2024 · ทบทวนค่า OTA ใน green coffee' },
+  { color:'#3a9a55', title:'ประกาศ สธ. สารปนเปื้อน (ฉ.414) — บังคับใช้ตามปกติ ไม่มีแก้ไข', meta:'อ.ย. กองอาหาร · ตรวจสอบ มิ.ย. 2568' },
+  { color:'#3a9a55', title:'Codex Stan 193 Rev.2023 — บังคับใช้ตามปกติ', meta:'Codex Alimentarius · 2566' },
+];
+
+const SM={stable:{lbl:'บังคับใช้',dc:'dg'},updated:{lbl:'มีการแก้ไข',dc:'da'},new:{lbl:'ฉบับใหม่',dc:'dr'}};
+const CL={สธ:'กระทรวง สธ.',กษ:'กระทรวง กษ.',codex:'Codex / สากล'};
+
+let currentFilter='all';
+
+function renderTable(f){
+  const data=f==='all'?REGS:f==='updated'?REGS.filter(r=>r.status!=='stable'):REGS.filter(r=>r.cat===f);
+  document.getElementById('countPill').textContent=data.length+' รายการ';
+  document.getElementById('statTotal').textContent=REGS.length;
+  document.getElementById('regBody').innerHTML=data.map(r=>{
+    const s=SM[r.status];
+    const badge=r.status==='new'?'<span class="badge bnew">ใหม่</span>':r.status==='updated'?'<span class="badge bchg">แก้ไข</span>':'';
+    const links=r.links.map(l=>`<a class="reg-link${l.pdf?' pdf':''}" href="${l.url}" target="_blank">${l.lbl}</a>`).join('');
+    return `<tr>
+      <td><div class="reg-name">${r.name}</div><div class="reg-scope">${r.scope}</div><div class="reg-links">${links}</div></td>
+      <td><span class="cat cat-${r.cat}">${CL[r.cat]}</span></td>
+      <td><span class="ver">${r.ver}</span></td>
+      <td><div class="srow"><div class="dot ${s.dc}"></div><span class="slbl">${s.lbl}</span>${badge}</div>${r.note?`<div class="upd-note">${r.note}</div>`:''}</td>
+      <td><div class="chips">${r.chips.map(c=>`<span class="chip">${c}</span>`).join('')}</div></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderChanges(items){
+  // items มาจาก JSON (changelog) หรือ CHANGES (hardcoded) ก็ได้
+  const list = items || CHANGES;
+  document.getElementById('changeList').innerHTML = list.map(c => {
+    // รองรับทั้ง format เดิม (color/title/meta) และ format JSON ใหม่ (date/summary/has_updates)
+    if(c.title){
+      return `<div class="ci"><div class="cdot" style="background:${c.color||'#6b7575'}"></div><div><div class="ctitle">${c.title}</div><div class="cmeta">${c.meta||''}</div></div></div>`;
+    } else {
+      const col = c.has_updates ? '#b03232' : c.errors?.length ? '#c47c1a' : '#3a9a55';
+      const icon = c.has_updates ? '✅' : c.errors?.length ? '⚠' : '✓';
+      return `<div class="ci"><div class="cdot" style="background:${col}"></div><div><div class="ctitle">${icon} ${c.summary}</div><div class="cmeta">${c.date}</div></div></div>`;
+    }
+  }).join('');
+}
+
+// ดึงข้อมูลจาก data/regulations.json (อัปเดตโดย GitHub Actions ทุกสัปดาห์)
+async function loadFromJSON(){
+  try {
+    const res = await fetch('data/regulations.json?t='+Date.now());
+    if(!res.ok) throw new Error('not found');
+    const data = await res.json();
+
+    // อัปเดต header stats
+    if(data.last_checked){
+      const d = new Date(data.last_checked+'T12:00:00');  // ใช้ตอนเที่ยงวัน ป้องกัน timezone ทำให้วันเพี้ยน
+      const dateStr = d.toLocaleDateString('th-TH',{day:'numeric',month:'short',year:'numeric'});
+      document.getElementById('statDate').textContent = dateStr;
+      document.getElementById('lastUpd').textContent = 'อัปเดต: '+dateStr;
+    }
+
+    // อัปเดตจำนวนรายการที่มีการเปลี่ยนแปลง
+    const updatedCount = data.sources
+      ? data.sources.filter(s => s.updated).length
+      : 0;
+    document.getElementById('statUpdated').textContent = updatedCount;
+
+    // อัปเดต alert banner ถ้ามีการเปลี่ยนแปลง
+    const alertBox = document.getElementById('alertBox');
+    if(data.has_updates && data.update_summary){
+      alertBox.classList.remove('hidden');
+      alertBox.querySelector('div:last-child').innerHTML =
+        `<strong>พบการเปลี่ยนแปลง</strong> — ${data.update_summary}`;
+    } else {
+      alertBox.classList.add('hidden');
+    }
+
+    // อัปเดต changelog จาก JSON จริง
+    if(data.changelog && data.changelog.length > 0){
+      renderChanges(data.changelog.slice(0,5)); // แสดง 5 รายการล่าสุด
+    }
+
+    console.log('✅ โหลดข้อมูลจาก regulations.json สำเร็จ ตรวจสอบล่าสุด:', data.last_checked);
+  } catch(e) {
+    // ถ้าโหลด JSON ไม่ได้ (เช่น เปิดจาก local file) ใช้ข้อมูล hardcoded แทน
+    console.log('ℹ️ ใช้ข้อมูล hardcoded (JSON ไม่พบ หรือเปิดจาก local):', e.message);
+    renderChanges(CHANGES);
+  }
+}
+
+function setFilter(f,btn){
+  currentFilter=f;
+  document.querySelectorAll('.tf').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');renderTable(f);
+}
+
+async function doCheck(){
+  const btn=document.getElementById('checkBtn'),sp=document.getElementById('spin');
+  btn.disabled=true;sp.style.display='block';
+  // โหลดข้อมูลใหม่จาก JSON
+  await loadFromJSON();
+  sp.style.display='none';btn.disabled=false;
+}
+
+const AI_SYS=`คุณเป็นผู้เชี่ยวชาญด้านกฎหมายและมาตรฐานสินค้าเกษตรไทยและสากล เฉพาะเมล็ดกาแฟโรบัสต้าดิบ (green bean)
+กฎหมายในระบบ:
+1. ประกาศ สธ. ฉ.197(2543)/276(2546)/330(2554) เรื่อง กาแฟ: ครอบคลุมทั้งเมล็ดดิบและเมล็ดคั่ว
+2. ประกาศ สธ. สารปนเปื้อน: OTA ≤10µg/kg, Aflatoxin B1 ≤10µg/kg, โลหะหนัก
+3. ประกาศ สธ. สารพิษตกค้าง: MRL รายสาร อ้างอิง Codex
+4. มกษ. 5701-2565: green bean, เกรด 1/2/3, defect count, ความชื้น ≤12.5% [ฉบับใหม่]
+5. มกษ. 9002: MRL รายพืช อ้างอิง Codex CXL
+6. พ.ร.บ. มาตรฐานสินค้าเกษตร 2551 (แก้ไข 2562): กรอบกฎหมาย
+7. Codex Stan 193 Rev.2023: OTA ≤10µg/kg green+roasted
+8. Codex CXC 27-1981 Rev.2016 (Draft Amend.2024): GMP green coffee, OTA prevention
+9. Codex CXL 2024: MRL 40+ สารในกาแฟ
+ตอบภาษาไทย กระชับ มีตัวเลขรูปธรรม`;
+
+async function askAI(prompt){
+  const res=document.getElementById('aiResult'),load=document.getElementById('aiLoad'),note=document.getElementById('aiNote');
+  res.style.display='none';note.style.display='none';load.style.display='flex';
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:AI_SYS,messages:[{role:'user',content:prompt}]})
+    });
+    if(!r.ok)throw new Error('status '+r.status);
+    const d=await r.json();
+    load.style.display='none';res.style.display='block';
+    res.textContent=d.content?.map(i=>i.text||'').join('')||'ไม่มีข้อมูล';
+  }catch(e){
+    load.style.display='none';
+    if(e.message.includes('fetch')||e.message.includes('Load')||e.message.includes('CORS')||e.message.includes('Failed')){
+      note.style.display='block';
+    }else{
+      res.style.display='block';res.textContent='เกิดข้อผิดพลาด: '+e.message;
+    }
+  }
+}
+
+renderTable('all');
+loadFromJSON(); // ดึงข้อมูลจริงจาก data/regulations.json
+</script>
+</body>
+</html>
