@@ -1,59 +1,65 @@
 {
-  "last_checked": "2026-06-15",
+  "last_checked": "2026-06-30",
   "has_updates": false,
-  "update_summary": "ตรวจสอบเสร็จ — error 6/6 รายการ",
-  "error_count": 6,
+  "update_summary": "ตรวจสอบครบทุกรายการ ไม่พบการเปลี่ยนแปลง",
+  "error_count": 0,
   "sources": [
     {
       "updated": false,
-      "detail": "ไม่สามารถตรวจสอบได้: HTTP Error 429: Too Many Requests",
-      "version": "error",
+      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่พบประกาศกำหนดมาตรฐานสินค้า",
+      "version": "",
       "id": "มกษ_5700",
       "name": "มกษ. 5700 กาแฟโรบัสต้า",
-      "checked_at": "2026-06-15"
+      "checked_at": "2026-06-30"
     },
     {
       "updated": false,
-      "detail": "ไม่สามารถตรวจสอบได้: HTTP Error 429: Too Many Requests",
-      "version": "error",
+      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่พบประกาศกระ",
+      "version": "",
       "id": "สธ_สารพิษ",
       "name": "ประกาศ สธ. สารพิษตกค้าง",
-      "checked_at": "2026-06-15"
+      "checked_at": "2026-06-30"
     },
     {
       "updated": false,
-      "detail": "ไม่สามารถตรวจสอบได้: HTTP Error 429: Too Many Requests",
-      "version": "error",
+      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่พบประกาศกระทรวงสาธาร",
+      "version": "",
       "id": "สธ_สารปนเปื้อน",
       "name": "ประกาศ สธ. สารปนเปื้อน OTA/Aflatoxin",
-      "checked_at": "2026-06-15"
+      "checked_at": "2026-06-30"
     },
     {
       "updated": false,
-      "detail": "ไม่สามารถตรวจสอบได้: HTTP Error 429: Too Many Requests",
-      "version": "error",
+      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"Codex CXC",
+      "version": "",
       "id": "codex_cxc27",
       "name": "Codex CXC 27-1981 (SB 07/16)",
-      "checked_at": "2026-06-15"
+      "checked_at": "2026-06-30"
     },
     {
       "updated": false,
-      "detail": "ไม่สามารถตรวจสอบได้: HTTP Error 429: Too Many Requests",
-      "version": "error",
+      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่พบการแก้ไข Codex Stan",
+      "version": "",
       "id": "codex_stan193",
       "name": "Codex Stan 193 Contaminants",
-      "checked_at": "2026-06-15"
+      "checked_at": "2026-06-30"
     },
     {
       "updated": false,
-      "detail": "ไม่สามารถตรวจสอบได้: HTTP Error 429: Too Many Requests",
-      "version": "error",
+      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่สามารถทำการค้นหาแบบ",
+      "version": "",
       "id": "codex_cxl",
       "name": "Codex MRL Pesticides in Coffee (CXL)",
-      "checked_at": "2026-06-15"
+      "checked_at": "2026-06-30"
     }
   ],
   "changelog": [
+    {
+      "date": "2026-06-30",
+      "has_updates": false,
+      "summary": "ตรวจสอบครบทุกรายการ ไม่พบการเปลี่ยนแปลง",
+      "errors": []
+    },
     {
       "date": "2026-06-15",
       "has_updates": false,
