@@ -392,7 +392,7 @@ async function loadFromJSON(){
 
     // อัปเดต header stats
     if(data.last_checked){
-      const d = new Date(data.last_checked+'T00:00:00');
+      const d = new Date(data.last_checked+'T12:00:00');  // ใช้ตอนเที่ยงวัน ป้องกัน timezone ทำให้วันเพี้ยน
       const dateStr = d.toLocaleDateString('th-TH',{day:'numeric',month:'short',year:'numeric'});
       document.getElementById('statDate').textContent = dateStr;
       document.getElementById('lastUpd').textContent = 'อัปเดต: '+dateStr;
