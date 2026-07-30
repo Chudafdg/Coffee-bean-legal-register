@@ -38,8 +38,8 @@ SOURCES = [
     },
     {
         "id": "codex_cxl",
-        "name": "Codex MRL Pesticides in Coffee (CXL)",
-        "check_prompt": "Check the Codex Alimentarius Pesticide Residues Database for coffee beans at fao.org/fao-who-codexalimentarius/codex-texts/dbs/pestres/commodities-detail/en/?c_id=240 — has there been any new or revised Maximum Residue Limit (MRL) added for coffee (commodity code 240) after 2024? Search for recent JMPR evaluations or CAC decisions affecting coffee MRLs."
+        "name": "Codex MRL — Coffee Beans (SB 0716) via JMPR",
+        "check_prompt": "Search for the latest JMPR (Joint FAO/WHO Meeting on Pesticide Residues) meeting report or outcomes that include evaluations for coffee beans (Codex commodity code SB 0716). Has JMPR 2024 or 2025 proposed any new or revised MRL specifically for coffee beans (SB 0716)? Search on fao.org/jmpr and fao.org/fao-who-codexalimentarius for JMPR reports mentioning coffee."
     },
 ]
 
