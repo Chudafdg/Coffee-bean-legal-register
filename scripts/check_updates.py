@@ -39,7 +39,7 @@ SOURCES = [
     {
         "id": "codex_cxl",
         "name": "Codex MRL Pesticides in Coffee (CXL)",
-        "check_prompt": "Search fao.org pesticide database for updates to Codex MRL for pesticides in coffee beans after 2024."
+        "check_prompt": "Check the Codex Alimentarius Pesticide Residues Database for coffee beans at fao.org/fao-who-codexalimentarius/codex-texts/dbs/pestres/commodities-detail/en/?c_id=240 — has there been any new or revised Maximum Residue Limit (MRL) added for coffee (commodity code 240) after 2024? Search for recent JMPR evaluations or CAC decisions affecting coffee MRLs."
     },
 ]
 
