@@ -1,5 +1,5 @@
 {
-  "last_checked": "2026-08-03",
+  "last_checked": "2026-08-10",
   "has_updates": false,
   "update_summary": "ตรวจสอบครบทุกรายการ ไม่พบการเปลี่ยนแปลง",
   "error_count": 0,
@@ -10,31 +10,31 @@
       "version": "",
       "id": "มกษ_5700",
       "name": "มกษ. 5700 กาแฟโรบัสต้า",
-      "checked_at": "2026-08-03"
+      "checked_at": "2026-08-10"
     },
     {
       "updated": false,
-      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่พบประกาศกระทรวงสา",
+      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"จากการตรวจสอบข้อมูล ณ ป",
       "version": "",
       "id": "สธ_สารพิษ",
       "name": "ประกาศ สธ. สารพิษตกค้าง",
-      "checked_at": "2026-08-03"
+      "checked_at": "2026-08-10"
     },
     {
       "updated": false,
-      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่พบประกาศกระทรวงสา",
+      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่พบประกาศกระทรวง",
       "version": "",
       "id": "สธ_สารปนเปื้อน",
       "name": "ประกาศ สธ. สารปนเปื้อน OTA/Aflatoxin",
-      "checked_at": "2026-08-03"
+      "checked_at": "2026-08-10"
     },
     {
       "updated": false,
-      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่พบเอกสาร",
+      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"The Code of Practice",
       "version": "",
       "id": "codex_cxc27",
       "name": "Codex CXC 27-1981 (SB 07/16)",
-      "checked_at": "2026-08-03"
+      "checked_at": "2026-08-10"
     },
     {
       "updated": false,
@@ -42,7 +42,7 @@
       "version": "",
       "id": "codex_stan193",
       "name": "Codex Stan 193 Contaminants",
-      "checked_at": "2026-08-03"
+      "checked_at": "2026-08-10"
     },
     {
       "updated": false,
@@ -50,10 +50,16 @@
       "version": "",
       "id": "codex_cxl",
       "name": "Codex MRL — Coffee Beans (SB 0716) via JMPR",
-      "checked_at": "2026-08-03"
+      "checked_at": "2026-08-10"
     }
   ],
   "changelog": [
+    {
+      "date": "2026-08-10",
+      "has_updates": false,
+      "summary": "ตรวจสอบครบทุกรายการ ไม่พบการเปลี่ยนแปลง",
+      "errors": []
+    },
     {
       "date": "2026-08-03",
       "has_updates": false,
