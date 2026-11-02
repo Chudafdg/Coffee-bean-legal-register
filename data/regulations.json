@@ -1,59 +1,67 @@
 {
-  "last_checked": "2026-10-26",
+  "last_checked": "2026-11-02",
   "has_updates": false,
-  "update_summary": "ตรวจสอบครบทุกรายการ ไม่พบการเปลี่ยนแปลง",
-  "error_count": 0,
+  "update_summary": "ตรวจสอบเสร็จ — error 1/6 รายการ",
+  "error_count": 1,
   "sources": [
     {
       "updated": false,
-      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่พบประกาศกำหนดมาตรฐานสินค้าเ",
+      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"จากการตรวจสอบไม่พบ",
       "version": "",
       "id": "มกษ_5700",
       "name": "มกษ. 5700 กาแฟโรบัสต้า",
-      "checked_at": "2026-10-26"
+      "checked_at": "2026-11-02"
     },
     {
       "updated": false,
-      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ประกาศกระทรวงสาธารณสุข",
+      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่พบประกาศกระ",
       "version": "",
       "id": "สธ_สารพิษ",
       "name": "ประกาศ สธ. สารพิษตกค้าง",
-      "checked_at": "2026-10-26"
+      "checked_at": "2026-11-02"
     },
     {
       "updated": false,
-      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่พบประกาศกระทรวงสาธาร",
+      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่พบประกาศกระ",
       "version": "",
       "id": "สธ_สารปนเปื้อน",
       "name": "ประกาศ สธ. สารปนเปื้อน OTA/Aflatoxin",
-      "checked_at": "2026-10-26"
+      "checked_at": "2026-11-02"
     },
     {
       "updated": false,
-      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"สถานะล่าสุดของ",
+      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่พบข้อมูลการรับรองร่าง",
       "version": "",
       "id": "codex_cxc27",
       "name": "Codex CXC 27-1981 (SB 07/16)",
-      "checked_at": "2026-10-26"
+      "checked_at": "2026-11-02"
     },
     {
       "updated": false,
-      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่พบการแก้ไขใดๆ",
+      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่พบการแก้ไข",
       "version": "",
       "id": "codex_stan193",
       "name": "Codex Stan 193 Contaminants",
-      "checked_at": "2026-10-26"
+      "checked_at": "2026-11-02"
     },
     {
       "updated": false,
-      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่พบรายงานการ",
-      "version": "",
+      "detail": "ไม่สามารถตรวจสอบได้: HTTP Error 503: Service Unavailable",
+      "version": "error",
       "id": "codex_cxl",
       "name": "Codex MRL — Coffee Beans (SB 0716) via JMPR",
-      "checked_at": "2026-10-26"
+      "checked_at": "2026-11-02"
     }
   ],
   "changelog": [
+    {
+      "date": "2026-11-02",
+      "has_updates": false,
+      "summary": "ตรวจสอบเสร็จ — error 1/6 รายการ",
+      "errors": [
+        "Codex MRL — Coffee Beans (SB 0716) via JMPR"
+      ]
+    },
     {
       "date": "2026-10-26",
       "has_updates": false,
@@ -164,12 +172,6 @@
     },
     {
       "date": "2026-07-06",
-      "has_updates": false,
-      "summary": "ตรวจสอบครบทุกรายการ ไม่พบการเปลี่ยนแปลง",
-      "errors": []
-    },
-    {
-      "date": "2026-06-30",
       "has_updates": false,
       "summary": "ตรวจสอบครบทุกรายการ ไม่พบการเปลี่ยนแปลง",
       "errors": []
