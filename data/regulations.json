@@ -1,59 +1,71 @@
 {
   "last_checked": "2026-11-02",
-  "has_updates": false,
-  "update_summary": "ตรวจสอบเสร็จ — error 1/6 รายการ",
-  "error_count": 1,
+  "has_updates": true,
+  "update_summary": "พบการเปลี่ยนแปลง: มกษ. 5700 กาแฟโรบัสต้า, ประกาศ สธ. สารพิษตกค้าง, Codex MRL — Coffee Beans (SB 0716) via JMPR",
+  "error_count": 0,
   "sources": [
     {
-      "updated": false,
-      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"จากการตรวจสอบไม่พบ",
-      "version": "",
+      "updated": true,
+      "detail": "มีการประกาศกำหนดมาตรฐานสินค้าเกษตร มกษ. 5700-2561 เมล็ดกาแฟโรบัสตา ฉบับใหม่ในราชกิจจานุเบกษา เมื่อวันที่ 14 พฤศจิกายน 2561 ซึ่งเป็นการยกเลิกฉบับเดิม มกษ. 5700-2552 และมีการกล่าวถึง มกษ. 5700 ในข่าวประชาสัมพันธ์ของ มกอช. ในปี 2569 ด้วย",
+      "version": "มกษ. 5700-2561",
+      "searched": true,
       "id": "มกษ_5700",
       "name": "มกษ. 5700 กาแฟโรบัสต้า",
       "checked_at": "2026-11-02"
     },
     {
-      "updated": false,
-      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่พบประกาศกระ",
-      "version": "",
+      "updated": true,
+      "detail": "พบประกาศกระทรวงสาธารณสุข (ฉบับที่ 460) พ.ศ. 2568 เรื่อง อาหารที่มีสารพิษตกค้าง ซึ่งเป็นการปรับปรุงและรวมประกาศฉบับเดิม 4 ฉบับเข้าไว้ด้วยกัน และมีผลบังคับใช้ตั้งแต่วันที่ 22 กรกฎาคม พ.ศ. 2568 เป็นต้นไป",
+      "version": "ฉบับที่ 460 พ.ศ. 2568",
+      "searched": true,
       "id": "สธ_สารพิษ",
       "name": "ประกาศ สธ. สารพิษตกค้าง",
       "checked_at": "2026-11-02"
     },
     {
       "updated": false,
-      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่พบประกาศกระ",
-      "version": "",
+      "detail": "จากการตรวจสอบไม่พบประกาศกระทรวงสาธารณสุขฉบับใหม่หรือแก้ไขค่า Ochratoxin A หรือ Aflatoxin ในกาแฟหลังปี 2566 บนเว็บไซต์ food.fda.moph.go.th ประกาศล่าสุดที่เกี่ยวข้องกับมาตรฐานอาหารที่มีสารปนเปื้อนคือ ฉบับที่ 414 พ.ศ. 2563 ซึ่งเผยแพร่เมื่อวันที่ 14 มิถุนายน 2566 แต่ไม่ได้ระบุถึงการเปลี่ยนแปลงค่า Ochratoxin A หรือ Aflatoxin ในกาแฟโดยเฉพาะ.",
+      "version": "ฉบับที่ 414 พ.ศ. 2563",
+      "searched": true,
       "id": "สธ_สารปนเปื้อน",
       "name": "ประกาศ สธ. สารปนเปื้อน OTA/Aflatoxin",
       "checked_at": "2026-11-02"
     },
     {
       "updated": false,
-      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่พบข้อมูลการรับรองร่าง",
+      "detail": "ไม่พบข้อมูลเกี่ยวกับการแก้ไขเพิ่มเติมฉบับร่างของ Codex CXC 27-1981 Code of Practice for Coffee ที่ได้รับการรับรองอย่างเป็นทางการหลังปี 2024. เอกสารที่เกี่ยวข้องกับกาแฟที่พบคือ CXC 70-2011 Code of Practice for the Prevention and Reduction of Ochratoxin A Contamination in Coffee ซึ่งแก้ไขล่าสุดในปี 2009.",
       "version": "",
+      "searched": true,
       "id": "codex_cxc27",
       "name": "Codex CXC 27-1981 (SB 07/16)",
       "checked_at": "2026-11-02"
     },
     {
       "updated": false,
-      "detail": "แปลง JSON ไม่ได้: {\"updated\": false, \"detail\": \"ไม่พบการแก้ไข",
-      "version": "",
+      "detail": "ไม่พบการแก้ไข Codex Stan 193 หลังจากปี 2023 ที่เกี่ยวข้องกับขีดจำกัด OTA หรือ Aflatoxin ในเมล็ดกาแฟโดยเฉพาะ. การแก้ไขล่าสุดของ Codex Stan 193 คือปี 2009. อย่างไรก็ตาม มีการกล่าวถึงการอัปเดต Codex Alimentarius Commission (CAC) General Standard for Contaminants and Toxins in Food and Feed, CXS 193-1995 ในปี 2023 ในเอกสารของ U.S. FDA. นอกจากนี้ มีการหารือเกี่ยวกับ Aflatoxin ในถั่วลิสงและ Aflatoxin M1 ในนมในการประชุม Codex Committee on Contaminants in Foods (CCCF) เมื่อเดือนมีนาคม 2023 แต่ไม่มีการกล่าวถึงกาแฟ.",
+      "version": "2009",
+      "searched": true,
       "id": "codex_stan193",
       "name": "Codex Stan 193 Contaminants",
       "checked_at": "2026-11-02"
     },
     {
-      "updated": false,
-      "detail": "ไม่สามารถตรวจสอบได้: HTTP Error 503: Service Unavailable",
-      "version": "error",
+      "updated": true,
+      "detail": "JMPR 2024 ได้เสนอ MRL ใหม่สำหรับ pydiflumetofen ในเมล็ดกาแฟ (SB 0716) ที่ 0.2 mg/kg. JMPR 2025 ได้เสนอ MRL ใหม่สำหรับ tiafenacil ในเมล็ดกาแฟ (SB 0716) ที่ 0.01* mg/kg.",
+      "version": "2024, 2025",
+      "searched": true,
       "id": "codex_cxl",
       "name": "Codex MRL — Coffee Beans (SB 0716) via JMPR",
       "checked_at": "2026-11-02"
     }
   ],
   "changelog": [
+    {
+      "date": "2026-11-02",
+      "has_updates": true,
+      "summary": "พบการเปลี่ยนแปลง: มกษ. 5700 กาแฟโรบัสต้า, ประกาศ สธ. สารพิษตกค้าง, Codex MRL — Coffee Beans (SB 0716) via JMPR",
+      "errors": []
+    },
     {
       "date": "2026-11-02",
       "has_updates": false,
@@ -166,12 +178,6 @@
     },
     {
       "date": "2026-07-13",
-      "has_updates": false,
-      "summary": "ตรวจสอบครบทุกรายการ ไม่พบการเปลี่ยนแปลง",
-      "errors": []
-    },
-    {
-      "date": "2026-07-06",
       "has_updates": false,
       "summary": "ตรวจสอบครบทุกรายการ ไม่พบการเปลี่ยนแปลง",
       "errors": []
