@@ -51,7 +51,12 @@ updated = true เฉพาะเมื่อพบการเปลี่ย�
 def call_gemini(prompt, max_retries=3):
     payload = json.dumps({
         "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {"temperature": 0.1, "maxOutputTokens": 400}
+        "tools": [{"google_search": {}}],  # เปิดให้ Gemini ค้นเว็บจริง (เดิมไม่ได้เปิด)
+        "generationConfig": {
+            "temperature": 0.1,
+            "maxOutputTokens": 2048,  # เดิม 400 น้อยเกินไป คำตอบถูกตัดกลางคัน
+            "thinkingConfig": {"thinkingBudget": 0}  # ไม่ให้ใช้โควตาไปกับการ "คิด"
+        }
     }).encode("utf-8")
 
     for attempt in range(max_retries):
@@ -60,9 +65,12 @@ def call_gemini(prompt, max_retries=3):
                 GEMINI_URL, data=payload,
                 headers={"Content-Type": "application/json"}, method="POST"
             )
-            with urllib.request.urlopen(req, timeout=30) as resp:
+            with urllib.request.urlopen(req, timeout=90) as resp:
                 data = json.loads(resp.read().decode("utf-8"))
-                return data["candidates"][0]["content"]["parts"][0]["text"].strip()
+                cand = data["candidates"][0]
+                text = "".join(p.get("text", "") for p in cand["content"]["parts"]).strip()
+                grounded = bool(cand.get("groundingMetadata"))  # True = ค้นเว็บจริง
+                return text, grounded
 
         except urllib.error.HTTPError as e:
             err_body = e.read().decode("utf-8", errors="ignore")
@@ -92,7 +100,7 @@ def call_gemini(prompt, max_retries=3):
 def check_source(source):
     full_prompt = f"{SYSTEM_PROMPT}\n\nคำถาม: {source['check_prompt']}"
     try:
-        text = call_gemini(full_prompt)
+        text, grounded = call_gemini(full_prompt)
         text = re.sub(r"```(?:json)?", "", text).strip()
         match = re.search(r"\{[^{}]+\}", text, re.DOTALL)
         if match:
@@ -100,8 +108,16 @@ def check_source(source):
             result.setdefault("updated", False)
             result.setdefault("detail", "ตรวจสอบเรียบร้อย")
             result.setdefault("version", "")
+            result["searched"] = grounded
+            if not grounded:
+                # Gemini ตอบจากความจำ ไม่ได้ค้นเว็บ -> เชื่อถือไม่ได้ ห้ามนับเป็น "ไม่มีการเปลี่ยนแปลง"
+                result["updated"] = False
+                result["detail"] = "Gemini ตอบโดยไม่ได้ค้นเว็บ (ผลไม่น่าเชื่อถือ): " + str(result["detail"])[:60]
+                result["version"] = "error"
             return result
-        return {"updated": False, "detail": f"แปลง JSON ไม่ได้: {text[:60]}", "version": ""}
+        # อ่านคำตอบไม่ได้ -> นับเป็น error (เดิมถูกนับเป็น "ไม่มีการเปลี่ยนแปลง")
+        return {"updated": False, "detail": f"อ่านคำตอบไม่ได้ (ไม่ใช่ JSON): {text[:60]}",
+                "version": "error", "searched": grounded}
     except Exception as e:
         return {"updated": False, "detail": f"ไม่สามารถตรวจสอบได้: {str(e)[:80]}", "version": "error"}
 
